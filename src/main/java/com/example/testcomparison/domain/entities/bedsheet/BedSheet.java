@@ -1,7 +1,6 @@
 package com.example.testcomparison.domain.entities.bedsheet;
 
 import com.example.testcomparison.domain.entities.Product;
-import com.example.testcomparison.domain.entities.ProductType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,21 +10,18 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Table(name="bed_sheet")
-public class BedSheet extends Product {
+@NoArgsConstructor
+public class BedSheet extends Product{
 
     @NonNull
-    @Enumerated
+    private BigDecimal price;
+
+    @NonNull
+    @Enumerated(EnumType.STRING)
     private TextileMaterial material;
 
     @NonNull
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private BedSheetSize size;
 
-    public BedSheet(TextileMaterial textileMaterial, BedSheetSize bedSheetSize, ProductType productType, BigDecimal price) {
-        super();
-    }
-
-    public BedSheet() {
-
-    }
 }

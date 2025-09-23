@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @MappedSuperclass
 @Getter
 @Setter
+@NoArgsConstructor
 public abstract class Product implements Serializable {
 
     @Id
@@ -16,8 +17,8 @@ public abstract class Product implements Serializable {
     private Long id;
 
     @NonNull
-    @Enumerated
-    private ProductType type;
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
 
     @NonNull
     private BigDecimal price;

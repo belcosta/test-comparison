@@ -1,3 +1,5 @@
+DROP TABLE if exists bed_sheet;
+
 DROP TYPE IF EXISTS product_type;
 CREATE TYPE product_type as ENUM (
     'BED_SHEET',
@@ -11,7 +13,6 @@ DROP TYPE IF EXISTS textile_material;
 CREATE TYPE textile_material as ENUM (
     'BAMBOO',
     'COTTON',
-    'COTTON_POLYESTER',
     'LINEN',
     'SILK'
 );
@@ -26,8 +27,8 @@ CREATE TYPE bed_sheet_size as ENUM (
 
 CREATE TABLE IF NOT EXISTS bed_sheet (
                          id BIGSERIAL PRIMARY KEY,
-                         product_type product_type NOT NULL,
+                         product_type varchar NOT NULL,
                          price NUMERIC(10, 2) NOT NULL,
-                         material textile_material NOT NULL,
-                         size bed_sheet_size NOT NULL
+                         material varchar NOT NULL,
+                         size varchar NOT NULL
 );

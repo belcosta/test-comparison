@@ -20,22 +20,22 @@ public class ProductController {
 
     @GetMapping(value="/add-bed-sheet")
     public BedSheet addBedSheet(){
-        BedSheet bedSheet = new BedSheet( TextileMaterial.BAMBOO, BedSheetSize.DOUBLE, ProductType.BED_SHEET, BigDecimal.valueOf(20.03
+        BedSheet bedSheet = new BedSheet();
+        bedSheet.setProductType(ProductType.BED_SHEET);
+        bedSheet.setPrice(BigDecimal.valueOf(20.03
         ));
-
-        bedSheet.setType(ProductType.BED_SHEET);
-        bedSheet.setId(1L);
+        bedSheet.setMaterial(TextileMaterial.BAMBOO);
+        bedSheet.setSize(BedSheetSize.DOUBLE);
 
         return bedSheetService.save(bedSheet);
 
     }
     @GetMapping(value="/get-bed-sheet")
     public List<BedSheet> getBedSheet(){
-
-        List<BedSheet> result =  bedSheetService.findByMaterial();
-        System.out.println("### re"+ result);
-        System.out.println("### dsajkdba");
-        return result;
+         return bedSheetService.findAll();
     }
-
+    @GetMapping(value="/get-bed-sheet-bamboo")
+    public List<BedSheet> getBedSheetBamboo(){
+        return  bedSheetService.findByMaterial(TextileMaterial.BAMBOO);
+    }
 }

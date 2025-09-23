@@ -18,7 +18,10 @@ public class BedSheetService {
     public BedSheet save(BedSheet bedSheet){
         return bedSheetRepo.save(bedSheet);
     }
-    public List<BedSheet> findByMaterial(){
-       return bedSheetRepo.findByMaterial(TextileMaterial.BAMBOO);
+    public List<BedSheet> findAll(){
+       return bedSheetRepo.findAll();
+    }
+    public List<BedSheet> findByMaterial(TextileMaterial material){
+       return bedSheetRepo.findByMaterial(material);
     }
 }
