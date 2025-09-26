@@ -17,10 +17,10 @@ public abstract class Product implements Serializable {
     private Long id;
 
     @NonNull
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
+    private BigDecimal price;
 
     @NonNull
-    private BigDecimal price;
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
 
 }

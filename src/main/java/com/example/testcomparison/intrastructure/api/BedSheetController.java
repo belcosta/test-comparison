@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController()
-public class ProductController {
+public class BedSheetController {
 
     @Autowired
-    private BedSheetService bedSheetService;
+    public BedSheetService bedSheetService;
 
     @PostMapping("/bed-sheet/create")
-    public BedSheet createBedSheet(final BedSheetDTO dto){
+    public BedSheet createBedSheet(@RequestBody final BedSheetDTO dto){
         return bedSheetService.save(BedSheet.from(dto));
     }
     @PostMapping("/bed-sheet/update-{id}")
-    public BedSheet updateBedSheet(@PathVariable(name = "id") Long id, BedSheetDTO dto) {
+    public BedSheet updateBedSheet(@PathVariable(name = "id") Long id, @RequestBody BedSheetDTO dto) {
         BedSheet existingBedSheet = bedSheetService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bed sheet with id " + id + " not found"));
 

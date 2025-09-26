@@ -11,11 +11,12 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class BedSheetDTO{
 
     private ProductType productType = ProductType.BED_SHEET;
 
+    @NonNull
     private BigDecimal price;
 
     @NonNull
@@ -26,5 +27,9 @@ public class BedSheetDTO{
     @Enumerated(EnumType.STRING)
     private BedSheetSize size;
 
-
+    public BedSheetDTO(TextileMaterial material, BigDecimal price, BedSheetSize size) {
+        this.price = price;
+        this.material = material;
+        this.size = size;
+    }
 }

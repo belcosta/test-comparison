@@ -2,9 +2,11 @@ package com.example.testcomparison.domain.entities.bedsheet;
 
 import com.example.testcomparison.domain.dto.BedSheetDTO;
 import com.example.testcomparison.domain.entities.Product;
+import com.example.testcomparison.domain.entities.ProductType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
@@ -19,6 +21,14 @@ public class BedSheet extends Product{
     @NonNull
     @Enumerated(EnumType.STRING)
     private BedSheetSize size;
+
+    public BedSheet(long bedSheetId, TextileMaterial material, BigDecimal one, BedSheetSize size) {
+        this.setId(bedSheetId);
+        this.setProductType(ProductType.BED_SHEET);
+        this.setPrice(one);
+        this.material = material;
+        this.size = size;
+    }
 
     public static BedSheet from (BedSheetDTO dto){
         BedSheet bedSheet = new BedSheet();
