@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.testcomparison.Utils.TestUtils.calculateTestDuration;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -50,7 +49,6 @@ import static org.hamcrest.Matchers.*;
 
         @Test
         void testCreateBedSheet() throws Exception {
-            long start = System.nanoTime();
 
             BedSheetDTO dto = new BedSheetDTO(TextileMaterial.BAMBOO, BigDecimal.TEN, BedSheetSize.DOUBLE);
             BedSheet bedSheet = BedSheet.from(dto);
@@ -67,12 +65,10 @@ import static org.hamcrest.Matchers.*;
                     .andExpect(jsonPath("$.price", is(10)))
                     .andExpect(jsonPath("$.material", is("BAMBOO")));
 
-        calculateTestDuration(start);
         }
 
         @Test
         void testUpdateBedSheet() throws Exception {
-            long start = System.nanoTime();
 
             long bedSheetId = 1L;
             BedSheetDTO dto = new BedSheetDTO(TextileMaterial.COTTON, BigDecimal.TEN, BedSheetSize.DOUBLE);
@@ -91,12 +87,10 @@ import static org.hamcrest.Matchers.*;
                     .andExpect(jsonPath("$.size", is("DOUBLE")))
                     .andExpect(jsonPath("$.price", is(10)));
 
-        calculateTestDuration(start);
         }
 
         @Test
         void testDeleteBedSheet() throws Exception {
-            long start = System.nanoTime();
 
             long bedSheetId = 1L;
             doNothing().when(bedSheetService).deleteById(bedSheetId);
@@ -106,12 +100,10 @@ import static org.hamcrest.Matchers.*;
 
             verify(bedSheetService, times(1)).deleteById(bedSheetId);
 
-        calculateTestDuration(start);
         }
 
         @Test
         void testGetAllBedSheet() throws Exception {
-            long start = System.nanoTime();
 
             BedSheet bedSheet1 = new BedSheet(1L, TextileMaterial.COTTON, BigDecimal.ONE, BedSheetSize.SINGLE);
             List<BedSheet> allBedSheets = Collections.singletonList(bedSheet1);
@@ -124,7 +116,6 @@ import static org.hamcrest.Matchers.*;
                     .andExpect(jsonPath("$", hasSize(1)))
                     .andExpect(jsonPath("$[0].material", is("COTTON")));
 
-        calculateTestDuration(start);
         }
     }
 

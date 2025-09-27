@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.testcomparison.Utils.TestUtils.calculateTestDuration;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -41,7 +40,6 @@ class BedSheetControllerJUnitTest {
     @Test
     public void testCreateBedSheet() {
 
-        long start = System.nanoTime();
 
         BedSheetDTO dto = createDto();
         BedSheet createdBedSheet = new BedSheet();
@@ -54,13 +52,11 @@ class BedSheetControllerJUnitTest {
         Assertions.assertEquals(createdBedSheet, result);
         Mockito.verify(bedSheetService).save(any(BedSheet.class));
 
-        calculateTestDuration(start);
     }
 
     @Test
     public void updateBedSheetShouldReturnUpdatedBedSheetWhenIdExists() {
 
-        long start = System.nanoTime();
 
         Long id = 1L;
         BedSheetDTO dto = createDto();
@@ -78,34 +74,29 @@ class BedSheetControllerJUnitTest {
         Mockito.verify(bedSheetService).findById(eq(id));
         Mockito.verify(bedSheetService).save(any(BedSheet.class));
 
-        calculateTestDuration(start);
     }
 
     @Test
     public void updateBedSheetShouldThrowExceptionWhenIdDoesNotExist() {
 
-        long start = System.nanoTime();
 
         Long id = 1L;
         BedSheetDTO dto = createDto();
 
         Mockito.when(bedSheetService.findById(eq(id))).thenReturn(Optional.empty());
 
-        RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
-            bedSheetController.updateBedSheet(id, dto);
-        });
+        RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () ->
+            bedSheetController.updateBedSheet(id, dto)
+        );
 
         Assertions.assertEquals("Bed sheet with id " + id + " not found", exception.getMessage());
         Mockito.verify(bedSheetService).findById(eq(id));
         Mockito.verify(bedSheetService, Mockito.never()).save(any(BedSheet.class));
 
-        calculateTestDuration(start);
     }
 
     @Test
     public void testDeleteBedSheet() {
-
-        long start = System.nanoTime();
 
         Long id = 1L;
 
@@ -115,13 +106,11 @@ class BedSheetControllerJUnitTest {
 
         Mockito.verify(bedSheetService).deleteById(eq(id));
 
-        calculateTestDuration(start);
     }
 
     @Test
     public void testGetAllBedSheet() {
 
-        long start = System.nanoTime();
 
         List<BedSheet> bedSheets = Arrays.asList(new BedSheet(), new BedSheet());
 
@@ -132,7 +121,6 @@ class BedSheetControllerJUnitTest {
         Assertions.assertEquals(bedSheets, result);
         Mockito.verify(bedSheetService).findAll();
 
-        calculateTestDuration(start);
     }
 
     private BedSheetDTO createDto() {
