@@ -22,8 +22,15 @@ public class BedSheet extends Product{
     @Enumerated(EnumType.STRING)
     private BedSheetSize size;
 
-    public BedSheet(long bedSheetId, TextileMaterial material, BigDecimal one, BedSheetSize size) {
+    public BedSheet(long bedSheetId, @NonNull TextileMaterial material, @NonNull BigDecimal one, @NonNull BedSheetSize size) {
         this.setId(bedSheetId);
+        this.setProductType(ProductType.BED_SHEET);
+        this.setPrice(one);
+        this.material = material;
+        this.size = size;
+    }
+
+    public BedSheet(@NonNull TextileMaterial material, @NonNull BigDecimal one, @NonNull BedSheetSize size) {
         this.setProductType(ProductType.BED_SHEET);
         this.setPrice(one);
         this.material = material;

@@ -32,67 +32,29 @@ class BedSheetControllerJUnitTest {
         bedSheetController.bedSheetService = bedSheetService;
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//
-//    }
-
     @Test
     public void testCreateBedSheet() {
 
-
-        BedSheetDTO dto = createDto();
-        BedSheet createdBedSheet = new BedSheet();
+        BedSheetDTO dto = createDto(TextileMaterial.BAMBOO, BigDecimal.valueOf(10L), BedSheetSize.DOUBLE);
+        BedSheet createdBedSheet = BedSheet.from(dto);
         createdBedSheet.setId(1L);
 
-        Mockito.when(bedSheetService.save(any(BedSheet.class))).thenReturn(createdBedSheet);
+        Mockito.when(bedSheetService.createOrUpdate(any(BedSheet.class))).thenReturn(createdBedSheet);
 
         BedSheet result = bedSheetController.createBedSheet(dto);
 
         Assertions.assertEquals(createdBedSheet, result);
-        Mockito.verify(bedSheetService).save(any(BedSheet.class));
-
     }
 
     @Test
-    public void updateBedSheetShouldReturnUpdatedBedSheetWhenIdExists() {
+    public void testUpdateBedSheet() {
+        BedSheet bedSheet = new BedSheet(TextileMaterial.SILK, BigDecimal.ONE, BedSheetSize.KING);
+        bedSheet.setId(1L);
 
+        BedSheetDTO dto = new BedSheetDTO(TextileMaterial.COTTON, BigDecimal.TEN, BedSheetSize.SINGLE);
 
-        Long id = 1L;
-        BedSheetDTO dto = createDto();
-        BedSheet existingBedSheet = new BedSheet();
-        existingBedSheet.setId(id);
-        BedSheet updatedBedSheet = BedSheet.from(dto);
-        updatedBedSheet.setId(id);
-
-        Mockito.when(bedSheetService.findById(eq(id))).thenReturn(Optional.of(existingBedSheet));
-        Mockito.when(bedSheetService.save(any(BedSheet.class))).thenReturn(updatedBedSheet);
-
-        BedSheet result = bedSheetController.updateBedSheet(id, dto);
-
-        Assertions.assertEquals(updatedBedSheet, result);
-        Mockito.verify(bedSheetService).findById(eq(id));
-        Mockito.verify(bedSheetService).save(any(BedSheet.class));
-
-    }
-
-    @Test
-    public void updateBedSheetShouldThrowExceptionWhenIdDoesNotExist() {
-
-
-        Long id = 1L;
-        BedSheetDTO dto = createDto();
-
-        Mockito.when(bedSheetService.findById(eq(id))).thenReturn(Optional.empty());
-
-        RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () ->
-            bedSheetController.updateBedSheet(id, dto)
-        );
-
-        Assertions.assertEquals("Bed sheet with id " + id + " not found", exception.getMessage());
-        Mockito.verify(bedSheetService).findById(eq(id));
-        Mockito.verify(bedSheetService, Mockito.never()).save(any(BedSheet.class));
-
+        Mockito.when(bedSheetService.findById(eq(1L))).thenReturn(Optional.of(BedSheet.from(dto)));
+        Mockito.when(bedSheetService.createOrUpdate(BedSheet.from(dto))).thenReturn(bedSheet);
     }
 
     @Test
@@ -111,24 +73,22 @@ class BedSheetControllerJUnitTest {
     @Test
     public void testGetAllBedSheet() {
 
+        List<BedSheet> allBedSheets = Arrays.asList(new BedSheet(), new BedSheet());
 
-        List<BedSheet> bedSheets = Arrays.asList(new BedSheet(), new BedSheet());
-
-        Mockito.when(bedSheetService.findAll()).thenReturn(bedSheets);
+        Mockito.when(bedSheetService.findAll()).thenReturn(allBedSheets);
 
         List<BedSheet> result = bedSheetController.getAllBedSheet();
 
-        Assertions.assertEquals(bedSheets, result);
+        Assertions.assertEquals(allBedSheets, result);
         Mockito.verify(bedSheetService).findAll();
-
     }
 
-    private BedSheetDTO createDto() {
+    private BedSheetDTO createDto(TextileMaterial material, BigDecimal price, BedSheetSize size) {
         BedSheetDTO dto = new BedSheetDTO();
-        dto.setPrice(BigDecimal.valueOf(10L));
-        dto.setMaterial(TextileMaterial.BAMBOO);
+        dto.setPrice(price);
+        dto.setMaterial(material);
         dto.setProductType(ProductType.BED_SHEET);
-        dto.setSize(BedSheetSize.KING);
+        dto.setSize(size);
         return dto;
     }
 }

@@ -15,7 +15,7 @@ public class BedSheetService {
         this.bedSheetRepo = bedSheetRepo;
     }
 
-    public BedSheet save(BedSheet bedSheet){
+    public BedSheet createOrUpdate(BedSheet bedSheet){
         return bedSheetRepo.save(bedSheet);
     }
 

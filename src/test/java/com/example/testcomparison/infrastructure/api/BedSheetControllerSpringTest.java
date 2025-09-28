@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +54,7 @@ import static org.hamcrest.Matchers.*;
             BedSheet bedSheet = BedSheet.from(dto);
             bedSheet.setId(1L);
 
-            when(bedSheetService.save(any(BedSheet.class))).thenReturn(bedSheet);
+            Mockito.when(bedSheetService.createOrUpdate(any(BedSheet.class))).thenReturn(bedSheet);
 
             mockMvc.perform(post("/bed-sheet/create")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -76,9 +76,9 @@ import static org.hamcrest.Matchers.*;
             BedSheet updatedBedSheet = new BedSheet(bedSheetId, TextileMaterial.COTTON, BigDecimal.TEN, BedSheetSize.DOUBLE);
 
             when(bedSheetService.findById(bedSheetId)).thenReturn(Optional.of(existingBedSheet));
-            when(bedSheetService.save(any(BedSheet.class))).thenReturn(updatedBedSheet);
+            when(bedSheetService.createOrUpdate(any(BedSheet.class))).thenReturn(updatedBedSheet);
 
-            mockMvc.perform(post("/bed-sheet/update-" + bedSheetId)
+            mockMvc.perform(put("/bed-sheet/update-" + bedSheetId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -86,35 +86,39 @@ import static org.hamcrest.Matchers.*;
                     .andExpect(jsonPath("$.material", is("COTTON")))
                     .andExpect(jsonPath("$.size", is("DOUBLE")))
                     .andExpect(jsonPath("$.price", is(10)));
-
         }
 
         @Test
         void testDeleteBedSheet() throws Exception {
 
-            long bedSheetId = 1L;
-            doNothing().when(bedSheetService).deleteById(bedSheetId);
+            Long bedSheetId = 1L;
+            Mockito.doNothing().when(bedSheetService).deleteById(bedSheetId);
 
             mockMvc.perform(delete("/bed-sheet/delete-" + bedSheetId))
                     .andExpect(status().isOk());
 
-            verify(bedSheetService, times(1)).deleteById(bedSheetId);
+            Mockito.verify(bedSheetService, times(1)).deleteById(bedSheetId);
 
         }
 
         @Test
         void testGetAllBedSheet() throws Exception {
 
-            BedSheet bedSheet1 = new BedSheet(1L, TextileMaterial.COTTON, BigDecimal.ONE, BedSheetSize.SINGLE);
-            List<BedSheet> allBedSheets = Collections.singletonList(bedSheet1);
+            List<BedSheet> allBedSheets = Arrays.asList(new BedSheet(TextileMaterial.COTTON, BigDecimal.ONE, BedSheetSize.SINGLE),
+                    new BedSheet(TextileMaterial.SILK, BigDecimal.TEN, BedSheetSize.QUEEN));
 
-            when(bedSheetService.findAll()).thenReturn(allBedSheets);
+            Mockito.when(bedSheetService.findAll()).thenReturn(allBedSheets);
 
             mockMvc.perform(get("/bed-sheet/all"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$", hasSize(1)))
-                    .andExpect(jsonPath("$[0].material", is("COTTON")));
+                    .andExpect(jsonPath("$", hasSize(2)))
+                    .andExpect(jsonPath("$[0].material", is("COTTON")))
+                    .andExpect(jsonPath("$[0].price", is(1)))
+                    .andExpect(jsonPath("$[0].size", is("SINGLE")))
+                    .andExpect(jsonPath("$[1].material", is("SILK")))
+                    .andExpect(jsonPath("$[1].price", is(10)))
+                    .andExpect(jsonPath("$[1].size", is("QUEEN")));
 
         }
     }

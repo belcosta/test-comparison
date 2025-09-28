@@ -15,16 +15,16 @@ public class BedSheetController {
 
     @PostMapping("/bed-sheet/create")
     public BedSheet createBedSheet(@RequestBody final BedSheetDTO dto){
-        return bedSheetService.save(BedSheet.from(dto));
+        return bedSheetService.createOrUpdate(BedSheet.from(dto));
     }
-    @PostMapping("/bed-sheet/update-{id}")
+    @PutMapping("/bed-sheet/update-{id}")
     public BedSheet updateBedSheet(@PathVariable(name = "id") Long id, @RequestBody BedSheetDTO dto) {
         BedSheet existingBedSheet = bedSheetService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bed sheet with id " + id + " not found"));
 
         BedSheet updatedBedSheet = BedSheet.from(dto);
         updatedBedSheet.setId(existingBedSheet.getId());
-        return bedSheetService.save(updatedBedSheet);
+        return bedSheetService.createOrUpdate(updatedBedSheet);
     }
 
     @DeleteMapping("/bed-sheet/delete-{id}")
